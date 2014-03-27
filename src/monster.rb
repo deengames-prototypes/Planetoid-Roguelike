@@ -1,17 +1,17 @@
-require 'model/entity'
-require 'component/health_component'
-require 'component/display_component'
-require 'component/battle_component'
-require 'utils/color'
+#require 'model/entity'
+#require 'component/health_component'
+#require 'component/display_component'
+#require 'component/battle_component'
+#require 'utils/color'
 
-class Monster < Entity
+class Monster < Hatchling::Entity
 
 	def initialize(x, y, type)
 		@type = type.to_s
 		first_char = type[0]
 		
 		components = {}
-		components[:display] = DisplayComponent.new(x, y, first_char, Color.new(0, 255, 0))
+		components[:display] = Hatchling::DisplayComponent.new(x, y, first_char, Color.new(0, 255, 0))
 		
 		# TODO: generate stats based on type
 		case type
@@ -23,8 +23,8 @@ class Monster < Entity
 			raise "Not sure how to make a monster of type #{type}"
 		end
 		
-		components[:health] = HealthComponent.new(health)
-		components[:battle] = BattleComponent.new(strength, speed)
+		components[:health] = Hatchling::HealthComponent.new(health)
+		components[:battle] = Hatchling::BattleComponent.new(strength, speed)
 				
 		super(components)
 	end

@@ -1,4 +1,7 @@
+require 'hatchling'
 require_relative 'monster'
+
+include Hatchling
 
 ### A randomly-generated dungeon. This code is game specific.
 class Dungeon
