@@ -1,9 +1,3 @@
-#require 'model/entity'
-#require 'component/health_component'
-#require 'component/display_component'
-#require 'component/battle_component'
-#require 'utils/color'
-
 class Monster < Hatchling::Entity
 
 	def initialize(x, y, type)
