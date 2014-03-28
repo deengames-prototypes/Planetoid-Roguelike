@@ -5,7 +5,7 @@ class Monster < Hatchling::Entity
 		first_char = type[0]
 		
 		components = {}
-		components[:display] = Hatchling::DisplayComponent.new(x, y, first_char, Color.new(0, 255, 0))
+		components[:display] = DisplayComponent.new(x, y, first_char, Color.new(0, 255, 0))
 		
 		# TODO: generate stats based on type
 		case type
@@ -17,8 +17,8 @@ class Monster < Hatchling::Entity
 			raise "Not sure how to make a monster of type #{type}"
 		end
 		
-		components[:health] = Hatchling::HealthComponent.new(health)
-		components[:battle] = Hatchling::BattleComponent.new(strength, speed, Game.instance.player)
+		components[:health] = HealthComponent.new(health)
+		components[:battle] = BattleComponent.new(strength, speed, Game.instance.player)
 				
 		super(components)
 	end
