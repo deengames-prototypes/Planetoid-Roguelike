@@ -5,7 +5,8 @@
 	
 	"stairs": {
 		"x": 40,
-		"y": 12
+		"y": 12,
+		"direction": "down"
 	},
 	
 	"start_x": "40",
