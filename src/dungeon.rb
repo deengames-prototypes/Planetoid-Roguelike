@@ -91,9 +91,9 @@ class Dungeon
 		g.connect_unconnected_rooms!()
 
 		# Convert to map data		
-		new_walls.each do |x, map|
-			map.each do |y, is_wall| 
-				@walls << [x, y] if is_wall == true || is_on_perimeter?(x, y)
+		new_walls.each do |wall_x, map|
+			map.each do |wall_y, is_wall| 
+				@walls << [wall_x, wall_y] if is_wall == true || is_on_perimeter?(wall_x, wall_y)
 			end
 		end
 		
@@ -199,9 +199,6 @@ class GraphOperator
 		# 2) For each unconnected room, tunnel to the closest room
 		# NB: Start at the starting room (contains the player)
 		
-		# Find the player's room
-		start_room = find_start_room()
-		
 		# Flood-fill the map
 		empty_tiles = find_empty_tiles()
 		
@@ -223,17 +220,7 @@ class GraphOperator
 			connected_rooms << r
 		end
 	end
-	
-	# Returns a room object (:x, :y, :radius)
-	def find_start_room()	
-		@rooms.each do |c|
-			if @player_start[:x] == c[:x] && @player_start[:y] == c[:y]
-				return c
-			end
-		end		
-		raise 'Can\'t find start room for player'
-	end
-	
+		
 	# Returns a bunch of elements like {:x => i, :y => j}
 	def find_empty_tiles()
 		empty_tiles = []
@@ -247,7 +234,6 @@ class GraphOperator
 			end
 		end		
 		
-		processed = 0
 		while (queue.length > 0) do
 			current = queue.pop			
 			x = current[:x]
