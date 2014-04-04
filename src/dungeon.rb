@@ -13,7 +13,7 @@ class Dungeon
 	def initialize(floor)				
 		@floor = floor
 		@width = 80
-		@height = 23
+		@height = 22
 		@perimeter = true
 		@entities = []
 		
@@ -62,10 +62,10 @@ class Dungeon
 	def generate_topology
 		# Fill 'er up!
 		@walls = []
-		new_walls = {}
-		(0..width).each do |x|
+		new_walls = {}		
+		(0 .. @width - 1).each do |x|
 			new_walls[x] = {}
-			(0..height).each do |y|
+			(0 .. @height - 1).each do |y|
 				new_walls[x][y] = true
 			end
 		end
