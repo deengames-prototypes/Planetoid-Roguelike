@@ -3,5 +3,6 @@ $LOAD_PATH.unshift '../Hatchling/lib'
 
 require 'hatchling'
 require_relative 'src/dungeon'
+require_relative 'src/battler'
 
 Hatchling::Game.new.start

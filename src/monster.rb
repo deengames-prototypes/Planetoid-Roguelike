@@ -18,7 +18,7 @@ class Monster < Hatchling::Entity
 		end
 		
 		components[:health] = HealthComponent.new(health)
-		components[:battle] = BattleComponent.new(strength, speed, Game.instance.player)
+		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => Game.instance.player})
 				
 		super(components)
 	end
