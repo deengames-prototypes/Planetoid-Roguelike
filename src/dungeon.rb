@@ -55,7 +55,7 @@ class Dungeon
 		m = rand(5) + 5
 		(1..m).each do |i|
 			coordinates = find_empty_spot
-			@entities << Monster.new(coordinates[:x], coordinates[:y], :drone)
+			@entities << Monster.new(coordinates[:x], coordinates[:y], :drone, Game.instance.player)
 		end
 	end
 	

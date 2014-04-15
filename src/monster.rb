@@ -1,7 +1,7 @@
 class Monster < Hatchling::Entity
 
-	def initialize(x, y, type)
-		@type = type.to_s
+	def initialize(x, y, type, target)
+		@type = type.to_s		
 		first_char = type[0]
 		
 		components = {}
@@ -18,8 +18,9 @@ class Monster < Hatchling::Entity
 		end
 		
 		components[:health] = HealthComponent.new(health)
-		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => Game.instance.player})
-				
+		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => target})
+		components[:name] = "Drone"
+		
 		super(components)
 	end
 end
