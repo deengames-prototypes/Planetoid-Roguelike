@@ -18,13 +18,10 @@ class Battler
 				health.get_hurt(damage)
 										
 				message = "#{attacker.name} attacks #{target.name} for #{damage} damage!"
-				if !health.is_alive? then
-					message += " #{target.name} dies!" 
-					dead_entities << target	
-				end
+				message += " #{target.name} dies!" if !health.is_alive?
 				messages << message
 			end
 		end
-		return {:messages => messages, :remove_entities => dead_entities}
+		return {:messages => messages}
 	end
 end
