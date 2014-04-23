@@ -5,8 +5,7 @@ include Hatchling
 
 class Battler
 	def resolve_attacks(attacks)
-		messages = []
-		dead_entities = []
+		messages = []		
 		
 		attacks.each do |a|
 			attacker = a[:attacker]
@@ -14,8 +13,8 @@ class Battler
 						
 			damage = attacker.get(:battle).strength
 			health = target.get(:health)			
-			health.get_hurt(damage)
-									
+			health.get_hurt(damage) if damage > 0
+
 			message = "#{attacker.name} attacks #{target.name} for #{damage} damage!"
 			message += " #{target.name} dies!" if !health.is_alive?
 			messages << message
