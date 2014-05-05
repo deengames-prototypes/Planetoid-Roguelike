@@ -1,4 +1,3 @@
-require 'hatchling'
 require_relative 'monster'
 
 include Hatchling
@@ -21,7 +20,7 @@ class Battler
 				if !health.is_alive?
 					message += " #{target.name} dies!" 
 					if attacker.name.downcase == 'player' then
-						attacker.get(:experience).gain_experience(target.experience)
+						attacker.get(:experience).gain_experience(target.experience)						
 					end
 				end
 				messages << message

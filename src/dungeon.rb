@@ -1,4 +1,3 @@
-require 'hatchling'
 require_relative 'monster'
 
 include Hatchling
@@ -10,15 +9,18 @@ class Dungeon
 	attr_accessor :entities # the new generic list, see TODO above
 	
 	
-	def initialize(floor)				
+	def initialize(floor, player)				
 		@floor = floor
 		@width = 80
 		@height = 22
 		@perimeter = true
 		@entities = []
+		@player = player
 		
-		generate_topology
-		generate_monsters
+		if (!player.nil?)
+			generate_topology
+			generate_monsters
+		end
 	end
 	
 	def add_wall(x, y)
@@ -55,7 +57,7 @@ class Dungeon
 		m = rand(5) + 5
 		(1..m).each do |i|
 			coordinates = find_empty_spot
-			@entities << Monster.new(coordinates[:x], coordinates[:y], :drone, Game.instance.player)
+			@entities << Monster.new(coordinates[:x], coordinates[:y], :drone, @player)
 		end
 	end
 	
