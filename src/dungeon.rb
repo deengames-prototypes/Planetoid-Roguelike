@@ -1,4 +1,5 @@
 require_relative 'monster'
+require 'hatchling/utils/logger'
 
 include Hatchling
 
@@ -65,6 +66,7 @@ class Dungeon
 		# Fill 'er up!
 		@walls = []
 		new_walls = {}		
+		
 		(0 .. @width - 1).each do |x|
 			new_walls[x] = {}
 			(0 .. @height - 1).each do |y|
@@ -127,7 +129,7 @@ class Dungeon
 		(x - radius .. x + radius).each do |i|
 			(y - radius .. y + radius).each do |j|
 				if (i - x)**2 + (j - y)**2 <= radius**2 && i >= 0 && j >= 0 && i < @width && j < @height then					
-					walls[i][j] = filled
+					walls[i][j] = filled					
 					# Randomly pick a perimeter point and generate a filled circle
 					# The source of the magic number 30: If the radius is 3, there
 					# are roughly 12 perimeter points; if we want this to happen once
@@ -277,7 +279,7 @@ class GraphOperator
 				# y - y1 = m(x - x1)
 				# y = m(x-x1) + y1
 				y = m * (x - start_x) + start_y
-				@new_walls[x][y.round] = false				
+				@new_walls[x][y.round] = false if x < @width && y.round < @height		
 				
 				if !last_spot.nil?
 					d = (x - last_spot[:x]).abs + (y.round - last_spot[:y]).abs
@@ -290,7 +292,7 @@ class GraphOperator
 							else
 								i = x
 							end							
-							@new_walls[i.round][j] = false
+							@new_walls[i.round][j] = false if i.round < @width && j < @height	
 						end
 					end
 				end
@@ -310,7 +312,7 @@ class GraphOperator
 				# (y - y1)/m = x-x1
 				# (y-y1)/m  +x1 = x
 				x = ((y - start_y) / (0.0 + m)) + start_x
-				@new_walls[x.round][y] = false
+				@new_walls[x.round][y] = false if x.round < @width && y < @height	
 				
 				if !last_spot.nil?
 					d = (x - last_spot[:x]).abs + (y.round - last_spot[:y]).abs					
@@ -319,7 +321,7 @@ class GraphOperator
 						max = [last_spot[:x], x.round].max
 						(min .. max).each do |i|
 							j = m.round * (i - last_spot[:x]) + y
-							@new_walls[i][j.round] = false
+							@new_walls[i][j.round] = false if i < @width && j.round < @height	
 						end
 					end
 				end
@@ -338,8 +340,8 @@ class GraphOperator
 			(start_x .. stop_x).each do |x|				
 				# We're at x, y and want to get to x+1, y+1
 				# So delve out x+1, y too
-				@new_walls[x][y] = false
-				@new_walls[x][y + y_increment] = false
+				@new_walls[x][y] = false if x < @width && y < @height	
+				@new_walls[x][y + y_increment] = false if x < @width && y + y_increment < @height	
 				y += y_increment				
 			end
 		end
