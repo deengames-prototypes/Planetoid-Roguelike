@@ -7,11 +7,11 @@ class Monster < Hatchling::Entity
 		components = {}
 		components[:display] = DisplayComponent.new(x, y, first_char, Color.new(0, 255, 0))
 		
-		# TODO: generate stats based on type
+		# TODO: generate stats based on type; this should be data
 		case type
 		when :drone
 			health = 15 + rand(5)
-			strength = 2 + rand(1)
+			strength = 3 + rand(2)
 			speed = 1
 			experience = 10
 		else

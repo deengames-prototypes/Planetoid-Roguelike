@@ -6,7 +6,7 @@ require_relative 'src/dungeon'
 require_relative 'src/battler'
 
 player = Entity.new({
-	:health => HealthComponent.new(50),
+	:health => HealthComponent.new(50, 0.05),
 	:battle => BattleComponent.new({:strength => 7, :speed => 3 }),	
 	:experience => ExperienceComponent.new(lambda { |level| return (level**2 * 50) + (level * 100) })
 })
