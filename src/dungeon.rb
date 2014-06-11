@@ -1,5 +1,4 @@
 require_relative 'monster'
-require 'hatchling/utils/logger'
 
 include Hatchling
 
