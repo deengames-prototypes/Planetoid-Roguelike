@@ -54,15 +54,37 @@ class Dungeon
 	end
 	
 	def generate_monsters
-		valid_types = [:drone]
-		valid_types << :hunter if floor >= 2
-		valid_types << :spitter if floor >= 3
+		# Smartly pick monsters based on a weighted average, which starts
+		# at 50% on the floor they appear, and decreases linearly by 5%/floor.		
+		start_probability = 0.5
+		prob_decrease_per_floor = 0.05 # todo: varies per type?
 		
+		# First, what monsters are valid on this floor?
+		probability = { :drone => start_probability - ((floor - 1) * prob_decrease_per_floor) }
+		probability[:hunter] = start_probability - ((floor - 2) * prob_decrease_per_floor) if floor >= 2
+		probability[:spitter] = start_probability - ((floor - 3) * prob_decrease_per_floor) if floor >= 3		
+		
+		# 5-10  monsters
 		m = rand(5) + 5
+		
 		(1..m).map { |i|
-			type = valid_types.sample
+			# random probability
+			p = rand(0.0 .. 1.0)
+			type = nil
+			# Find all monster candidates with >= p as their probability
+			# Randomly pick one.
+			candidates = []
+			probability.map { |kvp|
+				candidates << kvp[0] if p >= kvp[1]				
+			}
+						
+			# If there were no candidates, default to random selection
+			# from types available on this floor
+			candidates << probability.keys.sample if candidates.length == 0
+			
+			type = candidates.sample
 			coordinates = find_empty_spot
-			@entities << Monster.new(coordinates[:x], coordinates[:y], type, @player)
+			@entities << Monster.new(coordinates[:x], coordinates[:y], type, @player)			
 		}
 	end
 	
