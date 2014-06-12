@@ -54,11 +54,16 @@ class Dungeon
 	end
 	
 	def generate_monsters
+		valid_types = [:drone]
+		valid_types << :hunter if floor >= 2
+		valid_types << :spitter if floor >= 3
+		
 		m = rand(5) + 5
-		(1..m).each do |i|
+		(1..m).map { |i|
+			type = valid_types.sample
 			coordinates = find_empty_spot
-			@entities << Monster.new(coordinates[:x], coordinates[:y], :drone, @player)
-		end
+			@entities << Monster.new(coordinates[:x], coordinates[:y], type, @player)
+		}
 	end
 	
 	def generate_topology
