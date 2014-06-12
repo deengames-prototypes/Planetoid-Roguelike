@@ -29,12 +29,20 @@ class Dungeon
 	
 	
 	def is_valid_move?(move)
-		return !all_entities.include?({:x => move[:x], :y => move[:y]})
+		# Exclude stairs. We want: all_entities - @stairs,
+		# but we have to translate types.
+		stairs = []
+		@stairs.each do |s|
+			stairs << { x: s['x'], y: s['y'] }
+		end
+		
+		blocking_entities = all_entities - stairs
+		return !blocking_entities.include?({:x => move[:x], :y => move[:y]})
 	end
 	
 	private 
 	
-	# TODO: very expensive
+	# TODO: very expensive type translation/standardization.
 	def all_entities
 		to_return = []
 		
