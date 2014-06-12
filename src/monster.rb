@@ -10,8 +10,8 @@ class Monster < Hatchling::Entity
 		# TODO: generate stats based on type; this should be data
 		case type
 		when :drone
-			health = 15 + rand(5)
-			strength = 3 + rand(2)
+			health = 14 + rand(14)
+			strength = 4 + rand(3)
 			speed = 1
 			experience = 10
 		else
