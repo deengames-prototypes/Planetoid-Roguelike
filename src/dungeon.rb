@@ -37,7 +37,8 @@ class Dungeon
 		end
 		
 		blocking_entities = all_entities - stairs
-		return !blocking_entities.include?({:x => move[:x], :y => move[:y]})
+		blocking_entities = blocking_entities.find { |b| b[:x] == move[:x] && b[:y] == move[:y] && (b[:solid].nil? || b[:solid] == true) }
+		return blocking_entities.nil? || blocking_entities.count == 0
 	end
 	
 	private 
@@ -47,11 +48,11 @@ class Dungeon
 		to_return = []
 		
 		@stairs.each do |s|
-			to_return << { :x => s['x'], :y => s['y'] }
+			to_return << { :x => s['x'], :y => s['y'], :solid => false }
 		end
 		
 		@entities.each do |e|
-			to_return << { :x => e.get(:display).x, :y => e.get(:display).y }			
+			to_return << { :x => e.get(:display).x, :y => e.get(:display).y, :solid => e.has?(:solid) ? e.solid : false }			
 		end
 		
 		@walls.each do |w|

@@ -1,3 +1,6 @@
+require 'hatchling/utils/logger'
+require 'hatchling/component/interaction_component'
+
 class Monster < Hatchling::Entity
 
 	def initialize(x, y, type, target)
@@ -6,6 +9,7 @@ class Monster < Hatchling::Entity
 		
 		components = {}		
 		color = nil
+		before_move = nil
 		
 		# TODO: generate stats based on type; should this be data?
 		# TODO: when you change these, change valid_types in dungeon.rb
@@ -29,7 +33,16 @@ class Monster < Hatchling::Entity
 				experience = 64
 				# TODO: acid damage fades as it fades
 				# Base damage (max) is 35
-				color = Color.new(255, 75, 255)
+				color = Color.new(255, 75, 255)							
+				before_move = lambda { |pos| 
+					acid = Entity.new({
+						:display => DisplayComponent.new(pos[:x], pos[:y], '%', Color.new(255, 0, 255)),
+						:solid => false,
+						:on_step => InteractionComponent.new(lambda { |target| 
+							Logger.info("#{target.get(:display)} stepped on acid at #{acid.get(:display).x}, #{acid.get(:display).y}") })
+					})
+					Game.instance.add_entity(acid) if rand(0..100) <= 40 # % chance of acid
+				}
 			else
 				raise "Not sure how to make a monster of type #{type}"
 		end
@@ -39,7 +52,7 @@ class Monster < Hatchling::Entity
 		
 		components[:display] = DisplayComponent.new(x, y, first_char, color)
 		components[:health] = HealthComponent.new(health)
-		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => target})
+		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => target}, { :before_move => before_move })
 		components[:name] = type.to_s.capitalize
 		components[:experience] = experience
 		
