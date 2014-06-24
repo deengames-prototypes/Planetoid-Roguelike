@@ -1,6 +1,3 @@
-require 'hatchling/utils/logger'
-require 'hatchling/component/interaction_component'
-
 class Monster < Hatchling::Entity
 
 	def initialize(x, y, type, target)
