@@ -28,7 +28,7 @@ class Monster < Hatchling::Entity
 				color = Color.new(64, 100, 255)
 			when :spitter
 				health = 1
-				strength = 35 # reduce to 0 when you add acid
+				strength = 0 # reduce to 0 when you add acid
 				speed = 3
 				experience = 64
 				# TODO: acid damage fades as it fades
@@ -36,12 +36,20 @@ class Monster < Hatchling::Entity
 				color = Color.new(255, 75, 255)							
 				before_move = lambda { |pos| 
 					acid = Entity.new({
+						:lifetime => HealthComponent.new(5), # 5 moves
 						:display => DisplayComponent.new(pos[:x], pos[:y], '%', Color.new(255, 0, 255)),
 						:solid => false,
-						:on_step => InteractionComponent.new(lambda { |target| 
-							Logger.info("#{target.get(:display)} stepped on acid at #{acid.get(:display).x}, #{acid.get(:display).y}") })
+						:on_step => InteractionComponent.new(lambda { |target|
+							target.get(:health).get_hurt(35) if target.has?(:health) && target.get(:health).is_alive?
+							if target.has?(:name) && target.get(:name).downcase == 'player'
+								message = 'Argh, acid!!'
+							else
+								message = "#{target.get(:name)} steps on acid!"
+							end
+							Game.instance.add_message(message);							
+						})
 					})
-					Game.instance.add_entity(acid) if rand(0..100) <= 40 # % chance of acid
+					Game.instance.add_entity(acid) if rand(0..100) <= 50 # % chance of acid
 				}
 			else
 				raise "Not sure how to make a monster of type #{type}"

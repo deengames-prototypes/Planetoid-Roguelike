@@ -4,6 +4,7 @@ $LOAD_PATH.unshift '../Hatchling/lib'
 require 'hatchling'
 require_relative 'src/dungeon'
 require_relative 'src/battler'
+require_relative 'src/system/environment_system'
 
 player = Entity.new({
 	:health => HealthComponent.new(50, 0.02),
@@ -14,4 +15,5 @@ player = Entity.new({
 })
 
 g = Hatchling::Game.new(:player => player)
+g.add_system(EnvironmentSystem.new)
 g.start
