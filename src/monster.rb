@@ -32,33 +32,17 @@ class Monster < Hatchling::Entity
 				# Base damage (max) is 35
 				color = Color.new(255, 75, 255)
 									
-				before_move = lambda { |pos| 
-					acid = Entity.new({
-						:lifetime => HealthComponent.new(rand(10..20)), # fade away after 10-20 moves
-						:display => DisplayComponent.new(pos[:x], pos[:y], '%', Color.new(255, 0, 255)),
-						:solid => false,
-						:on_step => InteractionComponent.new(lambda { |target|
-							# Must be named, healthy, alive, non-spitter
-							if target.has?(:name) && target.get(:name) != 'Spitter' && target.has?(:health) && target.get(:health).is_alive?
-								target.get(:health).get_hurt(35)
-								if target.get(:name).downcase == 'player'
-									message = 'Argh, acid!!'
-								else
-									message = "#{target.get(:name)} steps on acid!"
-								end
-								Game.instance.add_message(message);
-							end	
-						})
-					})
-					Game.instance.add_entity(acid) if rand(0..100) <= 50 # % chance of acid
+				before_move = lambda { |pos| 					
+					make_acid(pos[:x], pos[:y]) if rand(0..100) <= 30 # % chance of acid
 				}
 				
 				before_attack = lambda { |target| 
-					self.get(:health).get_hurt(1) # self-destruct						
+					self.get(:health).get_hurt(1) # self-destruct
+					Game.instance.add_message("A splitter explodes!");
 				}
 				
 				on_death = lambda { 
-					puts "SPLURT!"
+					splatter
 				}
 			else
 				raise "Not sure how to make a monster of type #{type}"
@@ -74,5 +58,39 @@ class Monster < Hatchling::Entity
 		components[:experience] = experience
 		
 		super(components)
+	end
+	
+	def splatter
+		pos = self.get(:display)
+		# Theoretically, generate random points in a circle originating at us.
+		# Technically, just iterate over a 3x3 grid and randomly pick points.
+		(pos.y - 1 .. pos.y + 1).each do |y|
+			(pos.x - 1 .. pos.x + 1).each do |x|
+				# TODO: how do I check for bounds/entities and not splurt accordingly?
+				make_acid(x, y) if rand(0..100) <= 50
+			end
+		end
+	end
+	
+	def make_acid(x, y)
+		acid = Entity.new({
+			:lifetime => HealthComponent.new(rand(5..20)), # fade away after 10-20 moves
+			:display => DisplayComponent.new(x, y, '%', Color.new(255, 0, 255)),
+			:solid => false,
+			:on_step => InteractionComponent.new(lambda { |target|
+				# Must be named, healthy, alive, non-spitter
+				if target.has?(:name) && target.get(:name) != 'Spitter' && target.has?(:health) && target.get(:health).is_alive?
+					target.get(:health).get_hurt(35)
+					if target.get(:name).downcase == 'player'
+						message = 'Argh, acid!!'
+					else
+						message = "#{target.get(:name)} steps on acid!"
+					end
+					Game.instance.add_message(message);
+				end	
+			})
+		})
+		
+		Game.instance.add_entity(acid)
 	end
 end
