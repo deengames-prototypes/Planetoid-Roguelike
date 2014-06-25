@@ -30,7 +30,8 @@ class Monster < Hatchling::Entity
 				experience = 64
 				# TODO: acid damage fades as it fades
 				# Base damage (max) is 35
-				color = Color.new(255, 75, 255)							
+				color = Color.new(255, 75, 255)
+									
 				before_move = lambda { |pos| 
 					acid = Entity.new({
 						:lifetime => HealthComponent.new(rand(10..20)), # fade away after 10-20 moves
@@ -53,7 +54,11 @@ class Monster < Hatchling::Entity
 				}
 				
 				before_attack = lambda { |target| 
-					self.get(:health).get_hurt(1) # self-destruct				
+					self.get(:health).get_hurt(1) # self-destruct						
+				}
+				
+				on_death = lambda { 
+					puts "SPLURT!"
 				}
 			else
 				raise "Not sure how to make a monster of type #{type}"
@@ -63,8 +68,8 @@ class Monster < Hatchling::Entity
 		raise "Missing colour" if color.nil?
 		
 		components[:display] = DisplayComponent.new(x, y, first_char, color)
-		components[:health] = HealthComponent.new(health)
-		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => target}, { :before_move => before_move })
+		components[:health] = HealthComponent.new(health, nil, { :on_death => on_death })
+		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => target}, { :before_move => before_move, :before_attack => before_attack })
 		components[:name] = type.to_s.capitalize
 		components[:experience] = experience
 		
