@@ -33,7 +33,7 @@ class Monster < Hatchling::Entity
 				color = Color.new(255, 75, 255)							
 				before_move = lambda { |pos| 
 					acid = Entity.new({
-						:lifetime => HealthComponent.new(5), # 5 moves
+						:lifetime => HealthComponent.new(10), # 10 moves
 						:display => DisplayComponent.new(pos[:x], pos[:y], '%', Color.new(255, 0, 255)),
 						:solid => false,
 						:on_step => InteractionComponent.new(lambda { |target|
