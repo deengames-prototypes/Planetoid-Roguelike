@@ -13,5 +13,6 @@ player = Entity.new({
 	:experience => ExperienceComponent.new(lambda { |level| return (50*(level - 1)**2) + ((level - 1) * 100) })
 })
 
+# To seed a game, add :seed => value to the args hash
 g = Hatchling::Game.new(:player => player)
 g.start

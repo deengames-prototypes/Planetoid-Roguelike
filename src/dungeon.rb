@@ -52,7 +52,7 @@ class Dungeon
 		end
 		
 		@entities.each do |e|
-			to_return << { :x => e.get(:display).x, :y => e.get(:display).y, :solid => e.has?(:solid) ? e.solid : false }			
+			to_return << { :x => e.get(:display).x, :y => e.get(:display).y, :solid => e.has?(:solid) ? e.solid : true }			
 		end
 		
 		@walls.each do |w|
