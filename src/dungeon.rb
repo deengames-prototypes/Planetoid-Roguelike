@@ -65,13 +65,14 @@ class Dungeon
 	def generate_monsters
 		# Smartly pick monsters based on a weighted average, which starts
 		# at 50% on the floor they appear, and decreases linearly by 5%/floor.		
-		start_probability = 0.5
+		start_probability = 0.8
 		prob_decrease_per_floor = 0.05 # todo: varies per type?
 		
 		# First, what monsters are valid on this floor?
 		probability = { :drone => start_probability - ((floor - 1) * prob_decrease_per_floor) }
 		probability[:hunter] = start_probability - ((floor - 2) * prob_decrease_per_floor) if floor >= 2
-		probability[:spitter] = start_probability - ((floor - 3) * prob_decrease_per_floor) if floor >= 3		
+		probability[:goopie] = start_probability - ((floor - 3) * prob_decrease_per_floor) if floor >= 3		
+		probability[:spitter] = start_probability - ((floor - 4) * prob_decrease_per_floor) if floor >= 3	
 		
 		# 5-10  monsters
 		m = rand(5) + 5
