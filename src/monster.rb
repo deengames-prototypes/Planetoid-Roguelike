@@ -124,9 +124,9 @@ class Monster < Hatchling::Entity
 				# Must be named, healthy, alive, non-spitter
 				if target.has?(:name) && target.get(:name) != 'Spitter' && target.has?(:health) && target.get(:health).is_alive?
 					if target.get(:name).downcase == 'player'
-						message = 'You step in sticky golden goop.'
+						message = 'Goop climbs all over you.'
 					else
-						message = "#{target.get(:name)} steps on sticky goop."
+						message = "#{target.get(:name)} is covered in goop!"
 					end
 					Game.instance.add_message(message);
 				end	
