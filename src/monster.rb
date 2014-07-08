@@ -132,7 +132,15 @@ class Monster < Hatchling::Entity
 					else
 						message = "#{target.get(:name)} winces and wades through goop!"
 					end
-					Game.instance.add_message(message);				
+					Game.instance.add_message(message);
+					
+					target.add(:gooped, 5)					
+					# Update battle system to be goopified
+					battle = target.get(:battle) || BattleComponent.new
+					battle.set_on_move(lambda {|t|
+						target.add(:gooped, [target.get(:gooped) - 1, 0].max)						
+					})
+					target.add(:battle, battle)
 				end
 			})
 		})
