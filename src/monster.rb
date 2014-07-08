@@ -12,8 +12,8 @@ class Monster < Hatchling::Entity
 		# TODO: when you change these, change valid_types in dungeon.rb
 		case type
 			when :drone
-				health = 14 + rand(14) # 2-4 attacks to die
-				strength = 4 + rand(3) # 4-7 damage
+				health = 14 + rand(14)
+				strength = 4 + rand(3)
 				speed = 1
 				experience = 10
 				color = Color.new(0, 255, 0)
@@ -25,7 +25,7 @@ class Monster < Hatchling::Entity
 				color = Color.new(64, 100, 255)
 			when :goopie
 				health = 1
-				strength = 0
+				strength = 7 + rand(7)
 				speed = 3
 				experience = 63
 				color = Color.new(255, 255, 0)
@@ -88,7 +88,7 @@ class Monster < Hatchling::Entity
 		(pos.y - size .. pos.y + size).each do |y|
 			(pos.x - size .. pos.x + size).each do |x|
 				
-				# TODO: how do I check for bounds/entities and not splurt accordingly?
+				# TODO: how do I check for bounds/entities and not splurt accordingly on walls etc.?
 				particle = method.call(x, y) if (x - pos.x)**2 + (y - pos.y)**2 <= size**2 && rand(0..100) <= 50
 				Game.instance.add_entity(particle) unless particle.nil?				
 			end
@@ -132,8 +132,8 @@ class Monster < Hatchling::Entity
 					else
 						message = "#{target.get(:name)} winces and wades through goop!"
 					end
-					Game.instance.add_message(message);
-				end	
+					Game.instance.add_message(message);				
+				end
 			})
 		})
 	end

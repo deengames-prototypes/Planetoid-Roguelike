@@ -16,11 +16,11 @@ class Battler
 				health = target.get(:health)			
 				health.get_hurt(damage) if damage > 0
 
-				message = "#{attacker.name} attacks #{target.name} for #{damage} damage!"
+				message = "#{attacker.get(:name)} attacks #{target.get(:name)} for #{damage} damage!"
 				if !health.is_alive?
-					message += " #{target.name} dies!" 
-					if attacker.name.downcase == 'player' then
-						attacker.get(:experience).gain_experience(target.experience)
+					message += " #{target.get(:name)} dies!" 
+					if attacker.get(:name).downcase == 'player' then
+						attacker.get(:experience).gain_experience(target.get(:experience))
 					end
 				end
 				messages << message
