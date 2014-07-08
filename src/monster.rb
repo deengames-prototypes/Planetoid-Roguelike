@@ -57,7 +57,9 @@ class Monster < Hatchling::Entity
 		
 		components[:display] = DisplayComponent.new(x, y, first_char, color)
 		components[:health] = HealthComponent.new(health, nil, { :on_death => on_death })
-		components[:battle] = BattleComponent.new({:strength => strength, :speed => speed, :target => target}, { :before_move => before_move, :before_attack => before_attack })
+		components[:battle] = BattleComponent.new(
+			{:strength => strength, :speed => speed, :target => target},
+			{ :before_move => before_move, :before_attack => before_attack })
 		components[:name] = type.to_s.capitalize
 		components[:experience] = experience
 		
@@ -122,11 +124,13 @@ class Monster < Hatchling::Entity
 			:solid => false,
 			:on_step => InteractionComponent.new(lambda { |target|
 				# Must be named, healthy, alive, non-spitter
-				if target.has?(:name) && target.get(:name) != 'Spitter' && target.has?(:health) && target.get(:health).is_alive?
+				if target.has?(:name) && target.has?(:health) && target.get(:health).is_alive?
+					# nominal damage; triggers stuff, like splitters.
+					target.get(:health).get_hurt(5)
 					if target.get(:name).downcase == 'player'
-						message = 'Goop climbs all over you.'
+						message = 'You step in sticky goop. Ouch!'
 					else
-						message = "#{target.get(:name)} is covered in goop!"
+						message = "#{target.get(:name)} winces and wades through goop!"
 					end
 					Game.instance.add_message(message);
 				end	
